@@ -23,14 +23,17 @@ Consider the following examples, which are functionally the same:
   # later in your TableViewSource: 
   
   protected override IEnumerable<EZSection<T>> ConstructSections() =>
-    yield return _shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item)); // all that is needed to present your EZRows!
+    yield return _shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item)); 
+  // all that is needed to present your EZRows!
 ```
 - Declarative (Functional)
 ```dotnet
   # in your TableViewSource: 
   
   protected override IEnumerable<EZSection<T>> ConstructSections() =>
-    yield return _shoppingCart.ItemLines.Select(line => new EZRow(line.Item, _ => line.Item.ItemName, _ => $"Price: {line.Item.SalePrice}).WithImage(line.Item.Icon)); // all that is needed to present your EZRows!
+    yield return _shoppingCart.ItemLines.Select(
+      line => new EZRow(line.Item, _ => line.Item.ItemName, _ => $"Price: {line.Item.SalePrice}).WithImage(line.Item.Icon)); 
+  // all that is needed to present your EZRows!
 ```
 
 - Hybrids are supported!
@@ -54,8 +57,10 @@ Consider the following examples, which are functionally the same:
           yield return row.WithImage(row.Item.Icon == null ? ItemImageCache.GetImageForItem(row.Item.UPC) : row.Item.Icon));
        }
   }
+  // all that is needed to present your EZRows!
 ```
 
+Use it however it fits your style or needs!
 
 
 # Gettin' Funky - Volatile Data Binding
