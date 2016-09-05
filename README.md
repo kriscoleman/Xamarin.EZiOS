@@ -24,6 +24,7 @@ Consider the following examples, which are functionally the same:
   
   protected override IEnumerable<EZSection<Item>> ConstructSections() =>
     yield return new EZSection(_shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item))); 
+    
   // all that is needed to present your EZRows!
 ```
 - Declarative (Functional)
