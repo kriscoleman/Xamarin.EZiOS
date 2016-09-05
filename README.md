@@ -7,8 +7,59 @@ Designed to reduce boilerplate, and provide a degree of default implementation. 
 # OOP and Declarative Natures
 The core of EZiOS is designed around an OOP infrastructure, but through a functional API helper, you can use the API in a declartive nature. You can even mix the two!
 
+Consider the following examples, which are functionally the same: 
+- Pure OOP 
+```dotnet
+  class MyShoppingCartRow : EZRow<Item>
+  {
+  
+    public MyShoppingCartRow(Item item) : base (item, _ => item.ItemName, _ => $"Price: {item.SalePrice}")
+    {
+      this.Image = item.Icon;
+    }
+  
+  }
+  
+  # later in your TableViewSource: 
+  
+  protected override IEnumerable<EZSection<T>> ConstructSections() =>
+    yield return _shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item)); // all that is needed to present your EZRows!
+```
+- Declarative (Functional)
+```dotnet
+  # in your TableViewSource: 
+  
+  protected override IEnumerable<EZSection<T>> ConstructSections() =>
+    yield return _shoppingCart.ItemLines.Select(line => new EZRow(line.Item, _ => line.Item.ItemName, _ => $"Price: {line.Item.SalePrice}).WithImage(line.Item.Icon)); // all that is needed to present your EZRows!
+```
+
+- Hybrids are supported!
+```dotnet
+  class MyShoppingCartRow : EZRow<Item>
+  {
+  
+    public MyShoppingCartRow(Item item) : base (item, _ => item.ItemName, _ => $"Price: {item.SalePrice}")
+    {  }
+  
+  }
+  
+  # later in your TableViewSource: 
+  
+  protected override IEnumerable<EZSection<T>> ConstructSections() 
+  {
+       var itemRows = _shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item));
+       foreach (var row in itemRows)
+       {
+         // suppose we have a complex repo of images we need to maintain
+          yield return row.WithImage(row.Item.Icon == null ? ItemImageCache.GetImageForItem(row.Item.UPC) : row.Item.Icon));
+       }
+  }
+```
+
+
+
 # Gettin' Funky - Volatile Data Binding
-Because the iOS guidelines suggest an importance on keeping data observable and in real-time, EZiOS provides a lot of funcs for UI properties, so that you can set things like cell titles and subtitles, images, accessories and edit actions through funcs, and update the view in real time as your data changes. Don't worry, the regular properties are still there, too. 
+Because the iOS guidelines suggest an importance on keeping data observable and in real-time, EZiOS provides a lot of funcs for UI properties, so that you can set things like cell titles and subtitles, images, accessories and edit actions through funcs, and update the view in real time as your data changes. A cell can update this way by simply calling cocoa's framework TableView.ReloadData or reloading individual TableView.Rows or TableView.Sections, without the need to interface again with the EZ api and reconstructing all of your underlying sections. If you don't need to update the properties (for static views, like context menus), don't worry, the regular properties are still there, too.
 
 # Easy Table View Controllers
 An easy way to abstract out the behavior/structure of a UITableView is to imagine it as a two-dimensional array. EXiOS does this literally, implementing core TableView behavior using a simple 2D array model: List<EZSection<IEZRow<T>>. It's a list of sections, which contain rows. These provide sections and cells in your TableView. 
@@ -22,7 +73,7 @@ Designed so you can eliminate code but still have full control! Use the already 
 - Examples
 - Example Project
 - Navigation, Modal, Popover, and Alert helpers
-- Automatic Compile-Time binding of code-behind ViewControllers to accompyaning Storyboard files
-- Universal iPhone-iPad layout
-- General-purpose User Controls and Views 
+- Automatic Compile-Time binding of code-behind ViewControllers to accompyaning Storyboard files. (Storyboard parsing)
+- Opt-in Universal iPhone-iPad layout
+- Library of General-purpose User Controls and Views 
 - App-wide Friendly-Crash UX Logic
