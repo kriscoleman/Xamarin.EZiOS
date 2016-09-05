@@ -33,9 +33,9 @@ Consider the following examples, which are functionally the same:
   protected override IEnumerable<EZSection<T>> ConstructSections() =>
     yield return 
       _shoppingCart.ItemLines.Select(line => 
-        new EZRow(line.Item, 
-          _ => line.Item.ItemName, 
-            _ => $"Price: {line.Item.SalePrice})
+        new EZRow(item, 
+          _ => item.ItemName, 
+            _ => $"Price: {item.SalePrice}")
               .WithImage(line.Item.Icon)); 
   // all that is needed to present your EZRows!
 ```
