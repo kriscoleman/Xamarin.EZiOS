@@ -9,7 +9,7 @@ The core of EZiOS is designed around an OOP infrastructure, but through a functi
 
 Consider the following examples, which are functionally the same: 
 - Pure OOP 
-```dotnet
+```javascript
   class MyShoppingCartRow : EZRow<Item>
   {
   
@@ -27,7 +27,7 @@ Consider the following examples, which are functionally the same:
   // all that is needed to present your EZRows!
 ```
 - Declarative (Functional)
-```dotnet
+```javascript
   # in your TableViewSource: 
   
   protected override IEnumerable<EZSection<T>> ConstructSections() =>
@@ -37,7 +37,7 @@ Consider the following examples, which are functionally the same:
 ```
 
 - Hybrids are supported!
-```dotnet
+```javascript
   class MyShoppingCartRow : EZRow<Item>
   {
   
