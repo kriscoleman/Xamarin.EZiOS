@@ -22,21 +22,24 @@ Consider the following examples, which are functionally the same:
   
   # later in your TableViewSource: 
   
-  protected override IEnumerable<EZSection<T>> ConstructSections() =>
-    yield return _shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item)); 
+  protected override IEnumerable<EZSection<Item>> ConstructSections() =>
+    yield return new EZSection(_shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item))); 
   // all that is needed to present your EZRows!
 ```
 - Declarative (Functional)
 ```javascript
   # in your TableViewSource: 
   
-  protected override IEnumerable<EZSection<T>> ConstructSections() =>
+  protected override IEnumerable<EZSection<Item>> ConstructSections() =>
     yield return 
-      _shoppingCart.ItemLines.Select(line => 
-        new EZRow(item, 
-          _ => item.ItemName, 
-            _ => $"Price: {item.SalePrice}")
-              .WithImage(line.Item.Icon)); 
+      new EZSection
+        {
+          _shoppingCart.ItemLines.Select(line => 
+            new EZRow(item, 
+              _ => item.ItemName, 
+                _ => $"Price: {item.SalePrice}")
+                  .WithImage(line.Item.Icon))
+        };
   // all that is needed to present your EZRows!
 ```
 
@@ -52,14 +55,14 @@ Consider the following examples, which are functionally the same:
   
   # later in your TableViewSource: 
   
-  protected override IEnumerable<EZSection<T>> ConstructSections() 
+  protected override IEnumerable<EZSection<Item>> ConstructSections() 
   {
+       var section = new EZSection<Item>>
        var itemRows = _shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item));
        foreach (var row in itemRows)
        {
          // suppose we have a complex repo of images we need to maintain
-          yield return 
-            row.WithImage(row.Item.Icon == null 
+         section.Add(row.WithImage(row.Item.Icon == null 
               ? ItemImageCache.GetImageForItem(row.Item.UPC) 
               : row.Item.Icon));
        }
