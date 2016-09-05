@@ -33,7 +33,10 @@ Consider the following examples, which are functionally the same:
   protected override IEnumerable<EZSection<T>> ConstructSections() =>
     yield return 
       _shoppingCart.ItemLines.Select(line => 
-        new EZRow(line.Item, _ => line.Item.ItemName, _ => $"Price: {line.Item.SalePrice}).WithImage(line.Item.Icon)); 
+        new EZRow(line.Item, 
+          _ => line.Item.ItemName, 
+            _ => $"Price: {line.Item.SalePrice})
+              .WithImage(line.Item.Icon)); 
   // all that is needed to present your EZRows!
 ```
 
