@@ -64,17 +64,15 @@ Consider the following examples, which are functionally the same:
   protected override IEnumerable<EZSection<Item>> ConstructSections() 
   {
        yield return GetShoppingCartHeaderSection();
-       var cartSection = new EZSection<Item>>
-        {
-          _shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item))
-        };
-        
-       foreach (var row in cartSection)
+       
+       var cartSection = new EZSection<Item>>();
+       var cartRows = _shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item));
+       foreach (var row in cartRows)
        {
-         // suppose we have a complex repo of images we need to maintain
-         row = row.WithImage(row.Item.Icon == null 
+          // suppose we have a complex repo of images we need to maintain
+          cartSection.Add(row.WithImage(row.Item.Icon == null 
               ? ItemImageCache.GetImageForItem(row.Item.UPC) 
-              : row.Item.Icon);
+              : row.Item.Icon));
        }
        yield return cartSection;
        
