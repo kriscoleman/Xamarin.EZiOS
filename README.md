@@ -63,15 +63,19 @@ Consider the following examples, which are functionally the same:
   
   protected override IEnumerable<EZSection<Item>> ConstructSections() 
   {
-       var section = new EZSection<Item>>
+       yield return GetShoppingCartHeaderSection();
+       var cartSection = new EZSection<Item>>
        var itemRows = _shoppingCart.ItemLines.Select(line => new MyShoppingCartRow(line.Item));
        foreach (var row in itemRows)
        {
          // suppose we have a complex repo of images we need to maintain
-         section.Add(row.WithImage(row.Item.Icon == null 
+         cartSection.Add(row.WithImage(row.Item.Icon == null 
               ? ItemImageCache.GetImageForItem(row.Item.UPC) 
               : row.Item.Icon));
        }
+       yield return cartSection;
+       
+       yield return GetTotalsSection();
   }
   // all that is needed to present your EZRows!
 ```
