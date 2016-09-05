@@ -31,19 +31,20 @@ Consider the following examples, which are functionally the same:
   # in your TableViewSource: 
   
   protected override IEnumerable<EZSection<T>> ConstructSections() =>
-    yield return _shoppingCart.ItemLines.Select(
-      line => new EZRow(line.Item, _ => line.Item.ItemName, _ => $"Price: {line.Item.SalePrice}).WithImage(line.Item.Icon)); 
+    yield return 
+      _shoppingCart.ItemLines.Select(line => 
+        new EZRow(line.Item, _ => line.Item.ItemName, _ => $"Price: {line.Item.SalePrice}).WithImage(line.Item.Icon)); 
   // all that is needed to present your EZRows!
 ```
 
-- Hybrids are supported!
+- Hybrids are supported! This can come in handy when you have complex logic to handle.
 ```javascript
   class MyShoppingCartRow : EZRow<Item>
   {
   
     public MyShoppingCartRow(Item item) : base (item, _ => item.ItemName, _ => $"Price: {item.SalePrice}")
     {  }
-  
+    
   }
   
   # later in your TableViewSource: 
@@ -54,7 +55,10 @@ Consider the following examples, which are functionally the same:
        foreach (var row in itemRows)
        {
          // suppose we have a complex repo of images we need to maintain
-          yield return row.WithImage(row.Item.Icon == null ? ItemImageCache.GetImageForItem(row.Item.UPC) : row.Item.Icon));
+          yield return 
+            row.WithImage(row.Item.Icon == null 
+              ? ItemImageCache.GetImageForItem(row.Item.UPC) 
+              : row.Item.Icon));
        }
   }
   // all that is needed to present your EZRows!
