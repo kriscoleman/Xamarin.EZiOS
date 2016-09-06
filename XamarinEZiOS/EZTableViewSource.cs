@@ -12,7 +12,7 @@ namespace Xamarin.EZiOS
     ///     Simplifies the job of a UITableViewSource.
     ///     If a race condition is encountered with the animation thread, the indexPath returned by Cocoa will be negative, out of range of the array,
     ///     crashing and causing a bad user experience.
-    ///     This rarely occurs, but can happen if you are doing too much work or calling TableView.ReloadData in a fast loop.
+    ///     This rarely occurs, but can happen if you are doing too much work or calling TableView.ReloadData in a fast loop (which you shouldn't be doing, but can happen on accident).
     ///     If you encounter this, investigate what could be slowing down your animation thread.
     ///     In debug, a race condition is asserted, so you will be notified.  In release it will be handled gracefully and logged.
     /// </summary>
@@ -20,11 +20,11 @@ namespace Xamarin.EZiOS
     /// <seealso cref="UIKit.UITableViewSource" />
     public abstract class EZTableViewSource<T> : UITableViewSource where T : class, IEZRow<T>
     {
-        protected readonly UITableViewController _parentViewController;
+        protected readonly UITableViewController ParentViewController;
 
         protected EZTableViewSource(UITableViewController parentViewController)
         {
-            _parentViewController = parentViewController;
+            ParentViewController = parentViewController;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Xamarin.EZiOS
         {
             ClearSectionsAndUnhookSubscriptions();
             EZSections.AddRange(ConstructSections());
-            _parentViewController.TableView.ReloadData();
+            ParentViewController.TableView.ReloadData();
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Xamarin.EZiOS
         protected internal void ClearSectionsAndUnhookSubscriptions()
         {
             EZSections.Clear();
-            //todo: unhook 
+            //todo: unhook cell events when after we implement them
         }
 
         /// <summary>
