@@ -20,7 +20,7 @@ namespace Xamarin.EZiOS
     /// <seealso cref="UIKit.UITableViewSource" />
     public abstract class EZTableViewSource<T> : UITableViewSource where T : class, IEZRow<T>
     {
-        readonly UITableViewController _parentViewController;
+        protected readonly UITableViewController _parentViewController;
 
         protected EZTableViewSource(UITableViewController parentViewController)
         {
