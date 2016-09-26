@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UIKit;
-using Xamarin.EZiOS.Interfaces;
 
 namespace Xamarin.EZiOS
 {
@@ -34,7 +33,7 @@ namespace Xamarin.EZiOS
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="tableViewSource">The table view source.</param>
-        public void PrepareViewToLoad<T>(EZTableViewSource<T> tableViewSource) where T : class, IEZRow<T>
+        public void PrepareViewToLoad(EZTableViewSource tableViewSource)
         {
             TableView.Source = tableViewSource;
             RefreshSectionsAndReloadData = tableViewSource.RefreshSections;
@@ -96,12 +95,12 @@ namespace Xamarin.EZiOS
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="UIKit.UITableViewController" />
-    public class EZTableViewController<T> : EZTableViewController where T : class, IEZRow<T>
+    public class EZTableViewControllerBase : EZTableViewController
     {
-        readonly Func<IEnumerable<EZSection<T>>> _constructSectionsFunc;
+        readonly Func<IEnumerable<EZSection>> _constructSectionsFunc;
         readonly UITableViewController _parentViewController;
 
-        public EZTableViewController(Func<IEnumerable<EZSection<T>>> constructSectionsFunc, UITableViewController parentViewController)
+        public EZTableViewControllerBase(Func<IEnumerable<EZSection>> constructSectionsFunc, UITableViewController parentViewController)
         {
             _constructSectionsFunc = constructSectionsFunc;
             _parentViewController = parentViewController;
@@ -127,11 +126,11 @@ namespace Xamarin.EZiOS
         /// A Default implementation of EZTableViewSource
         /// </summary>
         /// <seealso cref="UIKit.UITableViewController" />
-        class DefaultTableViewSource : EZTableViewSource<T>
+        class DefaultTableViewSource : EZTableViewSource
         {
-            readonly Func<IEnumerable<EZSection<T>>> _constructSectionsFunc;
+            readonly Func<IEnumerable<EZSection>> _constructSectionsFunc;
 
-            public DefaultTableViewSource(Func<IEnumerable<EZSection<T>>> constructSectionsFunc, UITableViewController parentViewController) : base (parentViewController)
+            public DefaultTableViewSource(Func<IEnumerable<EZSection>> constructSectionsFunc, UITableViewController parentViewController) : base (parentViewController)
             {
                 _constructSectionsFunc = constructSectionsFunc;
             }
@@ -139,7 +138,7 @@ namespace Xamarin.EZiOS
             /// <summary>
             /// Constructs the sections.
             /// </summary>
-            protected override IEnumerable<EZSection<T>> ConstructSections() => _constructSectionsFunc?.Invoke() ?? Enumerable.Empty<EZSection<T>>();
+            protected override IEnumerable<EZSection> ConstructSections() => _constructSectionsFunc?.Invoke() ?? Enumerable.Empty<EZSection>();
         }
     }
 }

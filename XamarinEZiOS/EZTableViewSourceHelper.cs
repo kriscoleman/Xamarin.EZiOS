@@ -28,7 +28,7 @@ namespace Xamarin.EZiOS
         /// <param name="row">The row.</param>
         /// <param name="cellAccessory">The cell accessory.</param>
         /// <returns></returns>
-        public static IEZRow<T> WithCellAccessory<T>(this IEZRow<T> row, UITableViewCellAccessory cellAccessory)
+        public static IEZRow WithCellAccessory<T>(this IEZRow row, UITableViewCellAccessory cellAccessory)
         {
             row.CellAccessory = cellAccessory;
             return row;
@@ -41,7 +41,7 @@ namespace Xamarin.EZiOS
         /// <param name="row">The row.</param>
         /// <param name="cellReuseIdentifier">The cell reuse identifier.</param>
         /// <returns></returns>
-        public static IEZRow<T> WithCellReuseIdentifier<T>(this IEZRow<T> row, string cellReuseIdentifier)
+        public static IEZRow WithCellReuseIdentifier<T>(this IEZRow row, string cellReuseIdentifier)
         {
             row.ReuseIdentifier = cellReuseIdentifier;
             return row;
@@ -67,7 +67,7 @@ namespace Xamarin.EZiOS
         /// <param name="row">The row.</param>
         /// <param name="editRowActions">The edit row actions.</param>
         /// <returns></returns>
-        public static IEZRow<T> WithEditActions<T>(this IEZRow<T> row, UITableViewRowAction[] editRowActions)
+        public static IEZRow WithEditActions<T>(this IEZRow row, UITableViewRowAction[] editRowActions)
         {
             row.EditRowActions = editRowActions;
             return row;
@@ -82,7 +82,7 @@ namespace Xamarin.EZiOS
         /// <returns>
         ///   <c>true</c> if [is out of range] [the specified sections]; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsOutOfRange<T>(this NSIndexPath indexPath, List<EZSection<T>> sections) where T : class, IEZRow<T>
+        public static bool IsOutOfRange(this NSIndexPath indexPath, List<EZSection> sections)
         {
             if (indexPath.Section < 0 || indexPath.Section + 1 > sections.Count)
                 return true;

@@ -2,12 +2,11 @@
 
 namespace Xamarin.EZiOS.Interfaces
 {
-    public interface IEZRow<out T>
+    public interface IEZRow
     {
         string Title { get; }
         string SubTitle { get; }
         UITableViewCellStyle CellStyle { get; }
-        T Item { get; }
         UITableViewCellAccessory CellAccessory { get; set; }
         UITableViewRowAction[] EditRowActions { get; set; }
         string ReuseIdentifier { get; set; }

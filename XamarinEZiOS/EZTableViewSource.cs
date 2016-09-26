@@ -18,7 +18,7 @@ namespace Xamarin.EZiOS
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="UIKit.UITableViewSource" />
-    public abstract class EZTableViewSource<T> : UITableViewSource where T : class, IEZRow<T>
+    public abstract class EZTableViewSource : UITableViewSource 
     {
         readonly UITableViewController _parentViewController;
 
@@ -30,7 +30,7 @@ namespace Xamarin.EZiOS
         /// <summary>
         /// The list of EZSections, which each contain Rows.
         /// </summary>
-        public List<EZSection<T>> EZSections { get; protected set; }
+        public List<EZSection> EZSections{ get; protected set; }  
 
         /// <summary>
         ///     Gets or sets the can edit row function for the entire TableView
@@ -60,14 +60,14 @@ namespace Xamarin.EZiOS
         /// <summary>
         /// Constructs the sections.
         /// </summary>
-        protected abstract IEnumerable<EZSection<T>> ConstructSections();
+        protected abstract IEnumerable<EZSection> ConstructSections();
 
         /// <summary>
         /// Gets the row or default (null) if the IndexPath is out of Range.
         ///
         /// </summary>
         /// <param name="indexPath">The index path.</param>
-        public IEZRow<T> GetRowOrDefault(NSIndexPath indexPath)
+        public IEZRow GetRowOrDefault(NSIndexPath indexPath)
             => indexPath.IsOutOfRange(EZSections) ? null : EZSections[indexPath.Section][indexPath.Row];
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Xamarin.EZiOS
         /// <param name="tableView">The table view.</param>
         /// <param name="row">The row.</param>
         /// <returns></returns>
-        protected virtual UITableViewCell DequeReusableCell(UITableView tableView, IEZRow<T> row)
+        protected virtual UITableViewCell DequeReusableCell(UITableView tableView, IEZRow row)
             => tableView.DequeueReusableCell(string.IsNullOrWhiteSpace(row.ReuseIdentifier)
                 ? "cell"
                 : row.ReuseIdentifier);
@@ -87,14 +87,14 @@ namespace Xamarin.EZiOS
         /// <param name="cell">The cell.</param>
         /// <param name="row">The row.</param>
         /// <returns></returns>
-        protected virtual UITableViewCell ApplyDefaultStyleToCell(UITableViewCell cell, IEZRow<T> row)
+        protected virtual UITableViewCell ApplyDefaultStyleToCell(UITableViewCell cell, IEZRow row)
         {
             cell.TextLabel.Text = row.Title;
             if (row.CellStyle == UITableViewCellStyle.Subtitle)
                 cell.DetailTextLabel.Text = row.SubTitle;
             cell.Accessory = row.CellAccessory;
 
-            var ezRow = row as EZRow<T>;
+            var ezRow = row as EZRow;
             return ezRow == null ? cell : ApplyDefaultStyleToEZRowConcrete(ezRow, cell);
         }
 
@@ -104,7 +104,7 @@ namespace Xamarin.EZiOS
         /// <param name="ezRow">The EZRow.</param>
         /// <param name="cell">The cell.</param>
         /// <returns></returns>
-        protected virtual UITableViewCell ApplyDefaultStyleToEZRowConcrete(EZRow<T> ezRow, UITableViewCell cell)
+        protected virtual UITableViewCell ApplyDefaultStyleToEZRowConcrete(EZRow ezRow, UITableViewCell cell)
         {
             if (ezRow.Image != null)
                 cell.ImageView.Image = ezRow.Image;

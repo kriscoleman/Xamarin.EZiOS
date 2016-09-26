@@ -7,9 +7,7 @@ namespace Xamarin.EZiOS
     /// <summary>
     /// Represents a Section in a UITableView
     /// </summary>
-    /// <typeparam name="T">the Type of object being displayed in a list in the TableView</typeparam>
-    /// <seealso cref="System.Collections.Generic.List{T}" />
-    public class EZSection<T> : List<T> where T : class, IEZRow<T>
+    public class EZSection : List<IEZRow>
     {
         readonly string _headerTitleOnCreated;
         readonly string _footerTitleOnCreated;
